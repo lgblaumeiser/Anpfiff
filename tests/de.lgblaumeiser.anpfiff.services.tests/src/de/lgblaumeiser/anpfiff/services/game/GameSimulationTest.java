@@ -4,7 +4,7 @@
  * See license information
  */
 
-package de.lgblaumeiser.anpfiff.services;
+package de.lgblaumeiser.anpfiff.services.game;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -13,6 +13,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.lgblaumeiser.anpfiff.model.FootballTeam;
+import de.lgblaumeiser.anpfiff.services.game.GameResult;
+import de.lgblaumeiser.anpfiff.services.game.GameSimulationImpl;
 
 /**
  * Test for the game simulation service

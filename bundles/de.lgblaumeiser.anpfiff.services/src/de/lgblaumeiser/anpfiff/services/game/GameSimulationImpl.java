@@ -4,7 +4,7 @@
  * See license information
  */
 
-package de.lgblaumeiser.anpfiff.services;
+package de.lgblaumeiser.anpfiff.services.game;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Maps.newHashMap;

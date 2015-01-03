@@ -4,7 +4,7 @@
  *
  * See license information
  */
-package de.lgblaumeiser.anpfiff.services;
+package de.lgblaumeiser.anpfiff.services.game;
 
 import de.lgblaumeiser.anpfiff.model.FootballTeam;
 
