@@ -15,6 +15,8 @@ import org.junit.Test;
 import de.lgblaumeiser.anpfiff.model.FootballTeam;
 
 /**
+ * Test for the game simulation service
+ *
  * @author Lars Geyer-Blaumeiser
  *
  */
@@ -53,6 +55,8 @@ public class GameSimulationTest {
 	public void testInNumbers() {
 		int numhomegoals = 0;
 		int numguestgoals = 0;
+		int numhomeconditionreduction = 0;
+		int numguestconditionreduction = 0;
 		final FootballTeam hometeam = new FootballTeam();
 		final FootballTeam guestteam = new FootballTeam();
 
@@ -64,11 +68,17 @@ public class GameSimulationTest {
 			assertTrue(result.getGuestteamgoals() < 8);
 			numhomegoals += result.getHometeamgoals();
 			numguestgoals += result.getGuestteamgoals();
+			numhomeconditionreduction += result.getHomeshapereduction();
+			numguestconditionreduction += result.getGuestshapereduction();
 		}
 
 		assertTrue(numhomegoals > numguestgoals);
 		assertTrue(numhomegoals / 1000 < 4);
 		assertTrue(numguestgoals / 1000 < 4);
+		assertTrue(numhomeconditionreduction / 1000.0 > 16.0);
+		assertTrue(numhomeconditionreduction / 1000.0 < 20.0);
+		assertTrue(numguestconditionreduction / 1000.0 > 16.0);
+		assertTrue(numguestconditionreduction / 1000.0 < 20.0);
 	}
 
 	/**

@@ -86,7 +86,22 @@ class GameSimulationImpl implements GameSimulation {
 			guestgoals++;
 		}
 
-		return new GameResult(hometeam, guestteam, homegoals, guestgoals);
+		final int homeshapechange = shapeChange();
+		final int guestshapechange = shapeChange();
+
+		return new GameResult(hometeam, guestteam, homegoals, guestgoals, homeshapechange,
+				guestshapechange);
+	}
+
+	private int shapeChange() {
+		final double randomValue = randomGenerator.nextDouble();
+		if (randomValue <= 0.33) {
+			return 9;
+		}
+		if (randomValue <= 0.67) {
+			return 18;
+		}
+		return 27;
 	}
 
 	private static final double POSSIBILITY_FOR_RANDOM_GOAL = 0.1;
