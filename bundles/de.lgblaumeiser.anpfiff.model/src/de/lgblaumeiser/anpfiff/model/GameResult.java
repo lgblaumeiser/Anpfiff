@@ -6,26 +6,27 @@
 
 package de.lgblaumeiser.anpfiff.model;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * This class represents the result of a football game.
  *
  * @author Lars Geyer-Blaumeiser
  */
 public class GameResult {
-	private final FootballTeam hometeam;
-	private final FootballTeam guestteam;
+	private final Game game;
 
 	private final int hometeamgoals;
 	private final int guestteamgoals;
 
-	private final int homeshapereduction;
-	private final int guestshapereduction;
+	private final ShapeReduction homeshapereduction;
+	private final ShapeReduction guestshapereduction;
 
 	/**
 	 * Create a game result object
 	 *
-	 * @param hometeam
-	 *            The team played as home team
+	 * @param game
+	 *            The game for which this object shows the results
 	 * @param guestteam
 	 *            The team played as guest team
 	 * @param hometeamgoals
@@ -37,10 +38,12 @@ public class GameResult {
 	 * @param guestshapechange
 	 *            The reduction of the guest teams condition shape
 	 */
-	public GameResult(FootballTeam hometeam, FootballTeam guestteam, int hometeamgoals,
-			int guestteamgoals, int homeshapechange, int guestshapechange) {
-		this.hometeam = hometeam;
-		this.guestteam = guestteam;
+	public GameResult(Game game, int hometeamgoals, int guestteamgoals,
+			ShapeReduction homeshapechange, ShapeReduction guestshapechange) {
+		checkNotNull(game);
+		checkNotNull(homeshapechange);
+		checkNotNull(guestshapechange);
+		this.game = game;
 		this.hometeamgoals = hometeamgoals;
 		this.guestteamgoals = guestteamgoals;
 		homeshapereduction = homeshapechange;
@@ -51,14 +54,14 @@ public class GameResult {
 	 * @return The team played as home team
 	 */
 	public final FootballTeam getHometeam() {
-		return hometeam;
+		return game.getHometeam();
 	}
 
 	/**
 	 * @return The team played as guest team
 	 */
 	public final FootballTeam getGuestteam() {
-		return guestteam;
+		return game.getGuestteam();
 	}
 
 	/**
@@ -78,14 +81,14 @@ public class GameResult {
 	/**
 	 * @return The reduction of the home team shape
 	 */
-	public final int getHomeshapereduction() {
+	public final ShapeReduction getHomeshapereduction() {
 		return homeshapereduction;
 	}
 
 	/**
 	 * @return The reduction of the guest team shape
 	 */
-	public final int getGuestshapereduction() {
+	public final ShapeReduction getGuestshapereduction() {
 		return guestshapereduction;
 	}
 }

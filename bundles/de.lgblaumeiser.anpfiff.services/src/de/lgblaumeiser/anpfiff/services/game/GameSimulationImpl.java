@@ -13,7 +13,9 @@ import java.util.Map;
 import java.util.Random;
 
 import de.lgblaumeiser.anpfiff.model.FootballTeam;
+import de.lgblaumeiser.anpfiff.model.Game;
 import de.lgblaumeiser.anpfiff.model.GameResult;
+import de.lgblaumeiser.anpfiff.model.ShapeReduction;
 
 /**
  * Service implementation of the game simulation
@@ -59,11 +61,13 @@ class GameSimulationImpl implements GameSimulation {
 	}
 
 	@Override
-	public GameResult simulateGame(final FootballTeam hometeam, final FootballTeam guestteam) {
-		checkNotNull(hometeam);
-		checkNotNull(guestteam);
+	public GameResult simulateGame(final Game game) {
+		checkNotNull(game);
 		int homegoals = 0;
 		int guestgoals = 0;
+
+		final FootballTeam hometeam = game.getHometeam();
+		final FootballTeam guestteam = game.getGuestteam();
 
 		final boolean[] teamshapegoals = randomTeamShapeGoals(hometeam, guestteam);
 		if (teamshapegoals[0]) {
@@ -87,22 +91,21 @@ class GameSimulationImpl implements GameSimulation {
 			guestgoals++;
 		}
 
-		final int homeshapechange = shapeChange();
-		final int guestshapechange = shapeChange();
+		final ShapeReduction homeshapechange = shapeChange();
+		final ShapeReduction guestshapechange = shapeChange();
 
-		return new GameResult(hometeam, guestteam, homegoals, guestgoals, homeshapechange,
-				guestshapechange);
+		return new GameResult(game, homegoals, guestgoals, homeshapechange, guestshapechange);
 	}
 
-	private int shapeChange() {
+	private ShapeReduction shapeChange() {
 		final double randomValue = randomGenerator.nextDouble();
 		if (randomValue <= 0.33) {
-			return 9;
+			return ShapeReduction.LOW;
 		}
 		if (randomValue <= 0.67) {
-			return 18;
+			return ShapeReduction.MEDIUM;
 		}
-		return 27;
+		return ShapeReduction.HIGH;
 	}
 
 	private static final double POSSIBILITY_FOR_RANDOM_GOAL = 0.1;

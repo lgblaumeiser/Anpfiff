@@ -9,5 +9,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Import-Package: org.osgi.framework;version="1.3.0"
 Bundle-ActivationPolicy: lazy
 Require-Bundle: com.google.guava;bundle-version="15.0.0",
- de.lgblaumeiser.anpfiff.model;bundle-version="1.0.0"
+ de.lgblaumeiser.anpfiff.model;bundle-version="1.0.0",
+ com.google.inject;bundle-version="3.0.0",
+ de.lgblaumeiser.anpfiff.persistency;bundle-version="1.0.0"
 Export-Package: de.lgblaumeiser.anpfiff.services.game

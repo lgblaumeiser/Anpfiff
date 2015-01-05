@@ -7,3 +7,4 @@ Bundle-Vendor: Lars Geyer-Blaumeiser
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: de.lgblaumeiser.anpfiff.model
+Require-Bundle: com.google.guava;bundle-version="15.0.0"
