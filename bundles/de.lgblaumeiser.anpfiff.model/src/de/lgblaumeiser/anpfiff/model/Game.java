@@ -23,7 +23,7 @@ public class Game {
 	 * @param guestteam
 	 *            The guest team playing in the game
 	 */
-	public Game(FootballTeam hometeam, FootballTeam guestteam) {
+	public Game(final FootballTeam hometeam, final FootballTeam guestteam) {
 		checkNotNull(hometeam);
 		checkNotNull(guestteam);
 		this.hometeam = hometeam;

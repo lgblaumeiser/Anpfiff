@@ -38,8 +38,8 @@ public class GameResult {
 	 * @param guestshapechange
 	 *            The reduction of the guest teams condition shape
 	 */
-	public GameResult(Game game, int hometeamgoals, int guestteamgoals,
-			ShapeReduction homeshapechange, ShapeReduction guestshapechange) {
+	public GameResult(final Game game, final int hometeamgoals, final int guestteamgoals,
+			final ShapeReduction homeshapechange, final ShapeReduction guestshapechange) {
 		checkNotNull(game);
 		checkNotNull(homeshapechange);
 		checkNotNull(guestshapechange);

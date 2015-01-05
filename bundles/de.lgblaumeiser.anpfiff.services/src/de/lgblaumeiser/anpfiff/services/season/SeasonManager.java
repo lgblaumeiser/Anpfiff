@@ -22,5 +22,9 @@ public interface SeasonManager {
 	 * @return The general management object for a season which is the starting
 	 *         point for the model
 	 */
-	public Season newSeason();
+	Season newSeason();
+
+	static SeasonManager getSeasonManager() {
+		return SeasonManagerImpl.getInstance();
+	}
 }

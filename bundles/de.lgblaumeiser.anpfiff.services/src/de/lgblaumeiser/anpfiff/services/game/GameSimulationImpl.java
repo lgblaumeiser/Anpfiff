@@ -135,7 +135,7 @@ class GameSimulationImpl implements GameSimulation {
 		return randomGoalsOfDifference(difference);
 	}
 
-	private int randomGoalsOfDifference(int difference) {
+	private int randomGoalsOfDifference(final int difference) {
 		final Double[] percentages = differenceToPercentageMap.get(difference);
 		final Integer[] goals = differenceToGoalsForPercentageMap.get(difference);
 
@@ -148,7 +148,7 @@ class GameSimulationImpl implements GameSimulation {
 		throw new IllegalStateException();
 	}
 
-	private int limitDifference(int difference) {
+	private int limitDifference(final int difference) {
 		if (difference < -5) {
 			return -5;
 		}

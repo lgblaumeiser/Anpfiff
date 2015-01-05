@@ -21,8 +21,7 @@ import de.lgblaumeiser.anpfiff.persistency.PersistencyService;
  *
  * @author Lars Geyer-Blaumeiser
  */
-public class SeasonManagerImpl implements SeasonManager {
-	private static final int NUMBER_OF_GAMES_PER_DAY = 9;
+class SeasonManagerImpl implements SeasonManager {
 	private final PersistencyService persistency = PersistencyService.getPersistencyService();
 
 	/*
@@ -37,13 +36,23 @@ public class SeasonManagerImpl implements SeasonManager {
 		return new Season(teams, gamePlan);
 	}
 
-	private GamePlan createGamePlan(List<FootballTeam> teams) {
-		final List<Game> gameday = Lists.newArrayListWithCapacity(NUMBER_OF_GAMES_PER_DAY);
+	private GamePlan createGamePlan(final List<FootballTeam> teams) {
+		final List<Game> gameday = Lists.newArrayListWithCapacity(9);
 		for (int index = 0; index < 18; index += 2) {
 			gameday.add(new Game(teams.get(index), teams.get(index + 1)));
 		}
 		final List<List<Game>> gameDays = Lists.newArrayListWithCapacity(34);
 		gameDays.add(gameday);
 		return new GamePlan(gameDays);
+	}
+
+	private static final SeasonManager seasonManager = new SeasonManagerImpl();
+
+	public static SeasonManager getInstance() {
+		return seasonManager;
+	}
+
+	private SeasonManagerImpl() {
+		// Ensure Singleton behavior
 	}
 }

@@ -30,7 +30,8 @@ public class FootballTeam {
 	 * @param teamShape
 	 *            The condition shape of the team
 	 */
-	public FootballTeam(String name, int offensiveStrength, int defensiveStrength, int teamShape) {
+	public FootballTeam(final String name, final int offensiveStrength,
+			final int defensiveStrength, final int teamShape) {
 		checkNotNull(name);
 		checkArgument(offensiveStrength > 0);
 		checkArgument(defensiveStrength > 0);
