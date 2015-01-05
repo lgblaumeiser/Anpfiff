@@ -4,9 +4,7 @@
  * See license information
  */
 
-package de.lgblaumeiser.anpfiff.services.game;
-
-import de.lgblaumeiser.anpfiff.model.FootballTeam;
+package de.lgblaumeiser.anpfiff.model;
 
 /**
  * This class represents the result of a football game.
@@ -39,7 +37,7 @@ public class GameResult {
 	 * @param guestshapechange
 	 *            The reduction of the guest teams condition shape
 	 */
-	GameResult(FootballTeam hometeam, FootballTeam guestteam, int hometeamgoals,
+	public GameResult(FootballTeam hometeam, FootballTeam guestteam, int hometeamgoals,
 			int guestteamgoals, int homeshapechange, int guestshapechange) {
 		this.hometeam = hometeam;
 		this.guestteam = guestteam;

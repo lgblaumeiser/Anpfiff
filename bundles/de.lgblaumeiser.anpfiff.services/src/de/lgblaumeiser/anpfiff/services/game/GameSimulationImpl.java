@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Random;
 
 import de.lgblaumeiser.anpfiff.model.FootballTeam;
+import de.lgblaumeiser.anpfiff.model.GameResult;
 
 /**
  * Service implementation of the game simulation

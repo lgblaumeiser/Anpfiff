@@ -7,6 +7,7 @@
 package de.lgblaumeiser.anpfiff.services.game;
 
 import de.lgblaumeiser.anpfiff.model.FootballTeam;
+import de.lgblaumeiser.anpfiff.model.GameResult;
 
 /**
  * This interface provides a service that allows to simulate a football game. It summarizes all necessary methods to get all necessary results

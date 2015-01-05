@@ -13,7 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.lgblaumeiser.anpfiff.model.FootballTeam;
-import de.lgblaumeiser.anpfiff.services.game.GameResult;
+import de.lgblaumeiser.anpfiff.model.GameResult;
 import de.lgblaumeiser.anpfiff.services.game.GameSimulationImpl;
 
 /**
