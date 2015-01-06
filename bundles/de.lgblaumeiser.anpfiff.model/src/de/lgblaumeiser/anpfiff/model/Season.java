@@ -8,6 +8,7 @@ package de.lgblaumeiser.anpfiff.model;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static java.util.Objects.hash;
 
 import java.util.List;
 
@@ -30,5 +31,47 @@ public class Season {
 
 	public List<Game> getGameDay(final int index) {
 		return gamePlan.getGameDay(index);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		return hash(teams, gamePlan);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Season) {
+			final Season other = (Season) obj;
+			return teams.equals(other.teams) && gamePlan.equals(other.gamePlan);
+		}
+		return false;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		final StringBuilder seasonString = new StringBuilder(10000);
+		seasonString.append("Teams:\n");
+		for (final FootballTeam currentTeam : teams) {
+			seasonString.append(currentTeam);
+			seasonString.append("\n");
+		}
+		seasonString.append("\n");
+		seasonString.append(gamePlan);
+		return seasonString.toString();
 	}
 }

@@ -6,8 +6,11 @@
 
 package de.lgblaumeiser.anpfiff.model;
 
+import static com.google.common.base.Objects.equal;
+import static com.google.common.base.Objects.toStringHelper;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static java.util.Objects.hash;
 
 /**
  * Data object representing a football team in the game
@@ -72,5 +75,42 @@ public class FootballTeam {
 	 */
 	public String getName() {
 		return name;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		return hash(name, offensiveStrength, defensiveStrength, teamShape);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof FootballTeam) {
+			final FootballTeam other = (FootballTeam) obj;
+			return equal(name, other.name) && equal(defensiveStrength, other.defensiveStrength)
+					&& equal(offensiveStrength, other.offensiveStrength)
+					&& equal(teamShape, other.teamShape);
+		}
+		return false;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return toStringHelper(this).add("Name", name).add("Offense", offensiveStrength)
+				.add("Defense", defensiveStrength).add("Team Strength", teamShape).toString();
 	}
 }

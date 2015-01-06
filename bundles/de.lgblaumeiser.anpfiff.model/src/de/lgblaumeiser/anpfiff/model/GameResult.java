@@ -6,7 +6,9 @@
 
 package de.lgblaumeiser.anpfiff.model;
 
+import static com.google.common.base.Objects.equal;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static java.util.Objects.hash;
 
 /**
  * This class represents the result of a football game.
@@ -90,5 +92,53 @@ public class GameResult {
 	 */
 	public final ShapeReduction getGuestshapereduction() {
 		return guestshapereduction;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		return hash(game, hometeamgoals, guestteamgoals, homeshapereduction, guestshapereduction);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof GameResult) {
+			final GameResult other = (GameResult) obj;
+			return equal(game, other.game) && equal(hometeamgoals, other.hometeamgoals)
+					&& equal(guestteamgoals, other.guestteamgoals)
+					&& equal(homeshapereduction, other.homeshapereduction)
+					&& equal(guestshapereduction, other.guestshapereduction);
+		}
+		return false;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		final StringBuilder resultString = new StringBuilder(300);
+		resultString.append(game);
+		resultString.append(" ");
+		resultString.append(hometeamgoals);
+		resultString.append(" : ");
+		resultString.append(guestteamgoals);
+		resultString.append(" { ");
+		resultString.append(homeshapereduction);
+		resultString.append(", ");
+		resultString.append(guestshapereduction);
+		resultString.append(" }");
+		return resultString.toString();
 	}
 }

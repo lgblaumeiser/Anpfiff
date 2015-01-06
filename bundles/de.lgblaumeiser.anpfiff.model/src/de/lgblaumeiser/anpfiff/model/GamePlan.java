@@ -6,8 +6,10 @@
 
 package de.lgblaumeiser.anpfiff.model;
 
+import static com.google.common.base.Objects.equal;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static java.util.Objects.hash;
 
 import java.util.List;
 
@@ -33,6 +35,52 @@ public class GamePlan {
 	public List<Game> getGameDay(final int index) {
 		checkArgument(index >= 0 && index < 34);
 		return gameTable.get(index);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		return hash(gameTable);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof GamePlan) {
+			return equal(gameTable, ((GamePlan) obj).gameTable);
+		}
+		return false;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		final StringBuilder gameTableString = new StringBuilder(10000);
+		gameTableString.append("Game Plan\n");
+		int day = 1;
+		for (final List<Game> currentGameDay : gameTable) {
+			gameTableString.append("Day ");
+			gameTableString.append(day);
+			gameTableString.append(":\n");
+			for (final Game currentGame : currentGameDay) {
+				gameTableString.append(currentGame);
+				gameTableString.append("\n");
+			}
+			day++;
+		}
+		return gameTableString.toString();
 	}
 
 }

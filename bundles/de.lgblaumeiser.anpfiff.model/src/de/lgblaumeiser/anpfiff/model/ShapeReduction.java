@@ -12,5 +12,5 @@ package de.lgblaumeiser.anpfiff.model;
  * @author Lars Geyer-Blaumeiser
  */
 public enum ShapeReduction {
-	LOW, MEDIUM, HIGH
+	LOW, MEDIUM, HIGH;
 }
