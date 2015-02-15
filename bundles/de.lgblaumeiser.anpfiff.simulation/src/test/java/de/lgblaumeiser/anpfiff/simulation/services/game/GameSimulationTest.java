@@ -18,9 +18,9 @@ import org.junit.Test;
 import de.lgblaumeiser.anpfiff.simulation.model.FootballTeam;
 import de.lgblaumeiser.anpfiff.simulation.model.Game;
 import de.lgblaumeiser.anpfiff.simulation.model.GameResult;
+import de.lgblaumeiser.anpfiff.simulation.model.SeasonConstants;
 import de.lgblaumeiser.anpfiff.simulation.model.ShapeReduction;
 import de.lgblaumeiser.anpfiff.simulation.persistency.PersistencyService;
-import de.lgblaumeiser.anpfiff.simulation.services.game.GameSimulationImpl;
 
 /**
  * Test for the game simulation service
@@ -47,8 +47,8 @@ public class GameSimulationTest {
 	 */
 	@Test
 	public void test() {
-		final Game game = new Game(teams.get(teamRandomizer.nextInt(18)), teams.get(teamRandomizer
-				.nextInt(18)));
+		final Game game = new Game(teams.get(teamRandomizer.nextInt(SeasonConstants.NUMBER_OF_TEAMS)),
+				teams.get(teamRandomizer.nextInt(SeasonConstants.NUMBER_OF_TEAMS)));
 
 		final GameResult result = testee.simulateGame(game);
 		assertEquals(game.getHometeam(), result.getHometeam());
@@ -72,8 +72,8 @@ public class GameSimulationTest {
 		int numguestconditionreduction = 0;
 
 		for (int i = 0; i < NUMBER_OF_TEST_ITERATIONS; i++) {
-			final Game game = new Game(teams.get(teamRandomizer.nextInt(18)),
-					teams.get(teamRandomizer.nextInt(18)));
+			final Game game = new Game(teams.get(teamRandomizer.nextInt(SeasonConstants.NUMBER_OF_TEAMS)),
+					teams.get(teamRandomizer.nextInt(SeasonConstants.NUMBER_OF_TEAMS)));
 			final GameResult result = testee.simulateGame(game);
 			assertTrue(result.getHometeamgoals() >= 0);
 			assertTrue(result.getGuestteamgoals() >= 0);

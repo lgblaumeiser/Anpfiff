@@ -11,6 +11,7 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 import de.lgblaumeiser.anpfiff.simulation.model.FootballTeam;
+import de.lgblaumeiser.anpfiff.simulation.model.SeasonConstants;
 
 /**
  * A simple implementation of the persistency service
@@ -20,7 +21,7 @@ import de.lgblaumeiser.anpfiff.simulation.model.FootballTeam;
 class SimplePersistencyService implements PersistencyService {
 	@Override
 	public List<FootballTeam> loadInitialTeamData() {
-		final List<FootballTeam> teams = Lists.newArrayListWithCapacity(18);
+		final List<FootballTeam> teams = Lists.newArrayListWithCapacity(SeasonConstants.NUMBER_OF_TEAMS);
 		teams.add(new FootballTeam("Bayern München", 20, 20, 1100));
 		teams.add(new FootballTeam("VfL Wolfsburg", 19, 19, 1095));
 		teams.add(new FootballTeam("Bayer Leverkusen", 18, 18, 1085));
@@ -40,15 +41,5 @@ class SimplePersistencyService implements PersistencyService {
 		teams.add(new FootballTeam("Borussia Dortmund", 18, 18, 1095));
 		teams.add(new FootballTeam("SC Freiburg", 16, 17, 1090));
 		return teams;
-	}
-
-	private static final PersistencyService persistencyService = new SimplePersistencyService();
-
-	static PersistencyService getInstance() {
-		return persistencyService;
-	}
-
-	private SimplePersistencyService() {
-		// Only internal creation to ensure singleton
 	}
 }

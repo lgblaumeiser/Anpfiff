@@ -19,6 +19,6 @@ public interface PersistencyService {
 	List<FootballTeam> loadInitialTeamData();
 
 	static PersistencyService getPersistencyService() {
-		return SimplePersistencyService.getInstance();
+		return new SimplePersistencyService();
 	}
 }

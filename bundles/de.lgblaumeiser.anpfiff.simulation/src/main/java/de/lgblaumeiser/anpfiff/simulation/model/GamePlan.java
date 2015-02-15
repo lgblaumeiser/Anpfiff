@@ -25,15 +25,15 @@ public class GamePlan {
 
 	public GamePlan(final List<List<Game>> gameTable) {
 		checkNotNull(gameTable);
-		checkArgument(gameTable.size() == 34);
+		checkArgument(gameTable.size() == SeasonConstants.NUMBER_OF_GAME_DAYS);
 		for (final List<Game> gameDay : gameTable) {
-			checkArgument(gameDay.size() == 9);
+			checkArgument(gameDay.size() == SeasonConstants.NUMBER_OF_GAMES_PER_DAY);
 		}
 		this.gameTable = gameTable;
 	}
 
 	public List<Game> getGameDay(final int index) {
-		checkArgument(index >= 0 && index < 34);
+		checkArgument(index >= 0 && index < SeasonConstants.NUMBER_OF_GAME_DAYS);
 		return gameTable.get(index);
 	}
 

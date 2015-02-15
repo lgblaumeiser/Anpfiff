@@ -15,7 +15,7 @@ import java.util.List;
 import org.junit.Test;
 
 import de.lgblaumeiser.anpfiff.simulation.model.FootballTeam;
-import de.lgblaumeiser.anpfiff.simulation.persistency.PersistencyService;
+import de.lgblaumeiser.anpfiff.simulation.model.SeasonConstants;
 
 /**
  * Tests for the persistency service
@@ -28,10 +28,9 @@ public class PersistencyServiceTest {
 	 */
 	@Test
 	public void testLoadInitialTeamData() {
-		final List<FootballTeam> teams = PersistencyService.getPersistencyService()
-				.loadInitialTeamData();
+		final List<FootballTeam> teams = PersistencyService.getPersistencyService().loadInitialTeamData();
 
-		assertEquals(18, teams.size());
+		assertEquals(SeasonConstants.NUMBER_OF_TEAMS, teams.size());
 		for (final FootballTeam current : teams) {
 			assertTrue(current.getDefensiveStrength() > 0);
 			assertTrue(current.getOffensiveStrength() > 0);

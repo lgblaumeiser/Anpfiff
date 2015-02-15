@@ -23,7 +23,7 @@ public class Season {
 
 	public Season(final List<FootballTeam> teams, final GamePlan gamePlan) {
 		checkNotNull(teams);
-		checkArgument(teams.size() == 18);
+		checkArgument(teams.size() == SeasonConstants.NUMBER_OF_TEAMS);
 		checkNotNull(gamePlan);
 		this.teams = teams;
 		this.gamePlan = gamePlan;

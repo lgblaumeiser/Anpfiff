@@ -22,6 +22,7 @@ import de.lgblaumeiser.anpfiff.simulation.model.Game;
 import de.lgblaumeiser.anpfiff.simulation.model.GamePlan;
 import de.lgblaumeiser.anpfiff.simulation.model.GameResult;
 import de.lgblaumeiser.anpfiff.simulation.model.Season;
+import de.lgblaumeiser.anpfiff.simulation.model.SeasonConstants;
 import de.lgblaumeiser.anpfiff.simulation.persistency.PersistencyService;
 import de.lgblaumeiser.anpfiff.simulation.services.game.GameSimulation;
 
@@ -33,7 +34,8 @@ import de.lgblaumeiser.anpfiff.simulation.services.game.GameSimulation;
 class SeasonManagerImpl implements SeasonManager {
 	private final PersistencyService persistency = PersistencyService.getPersistencyService();
 
-	private static final Map<Integer, Integer[]> gameIndexMap = Maps.newHashMap();
+	private static final Map<Integer, Integer[]> gameIndexMap = Maps
+			.newHashMapWithExpectedSize(SeasonConstants.NUMBER_OF_GAME_DAYS_PER_HALF_SEASON);
 
 	static {
 		gameIndexMap.put(0, new Integer[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 0 });
@@ -59,8 +61,8 @@ class SeasonManagerImpl implements SeasonManager {
 
 	private Season season;
 
-	private final Map<Integer, List<GameResult>> gameDayStatistics = Maps.newHashMapWithExpectedSize(2 * gameIndexMap
-			.size());
+	private final Map<Integer, List<GameResult>> gameDayStatistics = Maps
+			.newHashMapWithExpectedSize(SeasonConstants.NUMBER_OF_GAME_DAYS);
 
 	/*
 	 * (non-Javadoc)
@@ -76,19 +78,19 @@ class SeasonManagerImpl implements SeasonManager {
 	}
 
 	private GamePlan createGamePlan(final List<FootballTeam> teams) {
-		final List<List<Game>> gameDays = Lists.newArrayListWithCapacity(34);
-		for (int index = 0; index < 34; index++) {
-			gameDays.add(Lists.<Game>newArrayListWithCapacity(9));
+		final List<List<Game>> gameDays = Lists.newArrayListWithCapacity(SeasonConstants.NUMBER_OF_GAME_DAYS);
+		for (int index = 0; index < SeasonConstants.NUMBER_OF_GAME_DAYS; index++) {
+			gameDays.add(Lists.<Game>newArrayListWithCapacity(SeasonConstants.NUMBER_OF_GAMES_PER_DAY));
 		}
 		final List<FootballTeam> teamsCopy = Lists.newArrayList(teams);
 		Collections.shuffle(teamsCopy);
 
-		for (int gameday = 0; gameday < 17; gameday++) {
+		for (int gameday = 0; gameday < SeasonConstants.NUMBER_OF_GAME_DAYS_PER_HALF_SEASON; gameday++) {
 			final List<Game> firstGameDay = gameDays.get(gameday);
-			final List<Game> backGameDay = gameDays.get(gameday + 17);
+			final List<Game> backGameDay = gameDays.get(gameday + SeasonConstants.NUMBER_OF_GAME_DAYS_PER_HALF_SEASON);
 			final Integer[] gamedayIndices = gameIndexMap.get(gameday);
 
-			for (int gameIndex = 0; gameIndex < 18; gameIndex += 2) {
+			for (int gameIndex = 0; gameIndex < SeasonConstants.NUMBER_OF_TEAMS; gameIndex += 2) {
 				firstGameDay.add(new Game(teamsCopy.get(gamedayIndices[gameIndex]), teamsCopy
 						.get(gamedayIndices[gameIndex + 1])));
 				backGameDay.add(new Game(teamsCopy.get(gamedayIndices[gameIndex + 1]), teamsCopy
@@ -101,6 +103,7 @@ class SeasonManagerImpl implements SeasonManager {
 	@Override
 	public SeasonManager playNextGameDay() {
 		final int gameDay = gameDayStatistics.size();
+		checkState(gameDay >= 0 && gameDay < SeasonConstants.NUMBER_OF_GAME_DAYS);
 		final List<Game> games = season.getGameDay(gameDay);
 		final List<GameResult> results = Lists.newArrayListWithCapacity(games.size());
 		for (final Game game : games) {
