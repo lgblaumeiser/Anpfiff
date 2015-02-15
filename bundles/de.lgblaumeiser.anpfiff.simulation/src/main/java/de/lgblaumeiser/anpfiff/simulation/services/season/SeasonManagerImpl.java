@@ -23,6 +23,7 @@ import de.lgblaumeiser.anpfiff.simulation.model.GamePlan;
 import de.lgblaumeiser.anpfiff.simulation.model.GameResult;
 import de.lgblaumeiser.anpfiff.simulation.model.Season;
 import de.lgblaumeiser.anpfiff.simulation.model.SeasonConstants;
+import de.lgblaumeiser.anpfiff.simulation.model.Table;
 import de.lgblaumeiser.anpfiff.simulation.persistency.PersistencyService;
 import de.lgblaumeiser.anpfiff.simulation.services.game.GameSimulation;
 
@@ -61,12 +62,14 @@ class SeasonManagerImpl implements SeasonManager {
 
 	private Season season;
 
+	private Table table;
+
 	private final Map<Integer, List<GameResult>> gameDayStatistics = Maps
 			.newHashMapWithExpectedSize(SeasonConstants.NUMBER_OF_GAME_DAYS);
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see de.lgblaumeiser.anpfiff.services.season.SeasonManager#newSeason()
 	 */
 	@Override
@@ -74,6 +77,7 @@ class SeasonManagerImpl implements SeasonManager {
 		final List<FootballTeam> teams = persistency.loadInitialTeamData();
 		final GamePlan gamePlan = createGamePlan(teams);
 		season = new Season(teams, gamePlan);
+		table = new Table(teams);
 		return this;
 	}
 
@@ -110,6 +114,7 @@ class SeasonManagerImpl implements SeasonManager {
 			results.add(gameSimulation.simulateGame(game));
 		}
 		gameDayStatistics.put(gameDay, results);
+		table.setResults(results);
 		return this;
 	}
 
@@ -127,5 +132,10 @@ class SeasonManagerImpl implements SeasonManager {
 		checkState(MapUtils.isNotEmpty(gameDayStatistics));
 		return gameDayStatistics.size() - 1;
 
+	}
+
+	@Override
+	public Table getTableForLastGameDay() {
+		return table;
 	}
 }

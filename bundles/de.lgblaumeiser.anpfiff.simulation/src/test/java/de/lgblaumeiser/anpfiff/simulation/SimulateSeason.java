@@ -29,7 +29,9 @@ public class SimulateSeason {
 			for (final GameResult game : season.getResultsForLastGameDay()) {
 				System.out.println(game);
 			}
-			System.out.println(" ");
+			System.out.println("\n");
+			System.out.println(season.getTableForLastGameDay());
+			System.out.println("\n");
 		}
 	}
 }

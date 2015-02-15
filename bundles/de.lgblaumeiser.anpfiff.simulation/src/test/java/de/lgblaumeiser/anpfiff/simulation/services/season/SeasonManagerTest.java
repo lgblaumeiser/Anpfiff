@@ -8,8 +8,10 @@ package de.lgblaumeiser.anpfiff.simulation.services.season;
 
 import static java.util.stream.Collectors.toSet;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -21,6 +23,8 @@ import com.google.common.collect.Sets;
 import de.lgblaumeiser.anpfiff.simulation.model.Game;
 import de.lgblaumeiser.anpfiff.simulation.model.GameResult;
 import de.lgblaumeiser.anpfiff.simulation.model.SeasonConstants;
+import de.lgblaumeiser.anpfiff.simulation.model.Table;
+import de.lgblaumeiser.anpfiff.simulation.model.TableEntry;
 
 /**
  * @author Lars Geyer-Blaumeiser
@@ -105,7 +109,7 @@ public class SeasonManagerTest {
 				final List<Game> gameDay = season.getLastGameDay();
 				seasonString = seasonString
 						+ gameDay.stream().map(game -> game.getHometeam().getName() + game.getGuestteam().getName())
-								.collect(Collectors.joining());
+						.collect(Collectors.joining());
 			}
 			if (seasonStrings.contains(seasonString)) {
 				duplicatedSeasons++;
@@ -113,5 +117,54 @@ public class SeasonManagerTest {
 			seasonStrings.add(seasonString);
 		}
 		assertEquals(0, duplicatedSeasons);
+	}
+
+	@Test
+	public void testTable() {
+		final SeasonManager season = SeasonManager.getSeasonManager().newSeason();
+		int pointsGatheredFromResults = 0;
+		int goalsGatheredFromResults = 0;
+		for (int currentDay = 0; currentDay < SeasonConstants.NUMBER_OF_GAME_DAYS; currentDay++) {
+			final Set<String> teamNames = Sets.newHashSetWithExpectedSize(SeasonConstants.NUMBER_OF_TEAMS);
+			int pointsGatheredFromTable = 0;
+			int goalsShotGatheredFromTable = 0;
+			int goalsReceivedGatheredFromTable = 0;
+			season.playNextGameDay();
+			final List<GameResult> gameDayResult = season.getResultsForLastGameDay();
+			pointsGatheredFromResults += gameDayResult.stream()
+					.map(gameResult -> gameResult.getHometeamgoals() == gameResult.getGuestteamgoals() ? 2 : 3)
+					.mapToInt(Integer::intValue).sum();
+			goalsGatheredFromResults += gameDayResult.stream()
+					.map(gameResult -> gameResult.getHometeamgoals() + gameResult.getGuestteamgoals())
+					.mapToInt(Integer::intValue).sum();
+			final Table table = season.getTableForLastGameDay();
+			for (final TableEntry tableEntry : table.getTeamIterator()) {
+				teamNames.add(tableEntry.getTeam().getName());
+				pointsGatheredFromTable += tableEntry.getPoints();
+				goalsShotGatheredFromTable += tableEntry.getGoalsShot();
+				goalsReceivedGatheredFromTable += tableEntry.getGoalsReceived();
+			}
+			assertEquals(pointsGatheredFromResults, pointsGatheredFromTable);
+			assertEquals(goalsGatheredFromResults, goalsShotGatheredFromTable);
+			assertEquals(goalsGatheredFromResults, goalsReceivedGatheredFromTable);
+			assertEquals(SeasonConstants.NUMBER_OF_TEAMS, teamNames.size());
+		}
+	}
+
+	@Test
+	public void testSequenceInTable() {
+		final SeasonManager season = SeasonManager.getSeasonManager().newSeason();
+		for (int gameday = 0; gameday < SeasonConstants.NUMBER_OF_GAME_DAYS; gameday++) {
+			season.playNextGameDay();
+			final Table table = season.getTableForLastGameDay();
+			final Iterable<TableEntry> entries = table.getTeamIterator();
+			final Iterator<TableEntry> iterator = entries.iterator();
+			TableEntry last = iterator.next();
+			while (iterator.hasNext()) {
+				final TableEntry current = iterator.next();
+				assertFalse(last.getPoints() < current.getPoints());
+				last = current;
+			}
+		}
 	}
 }
