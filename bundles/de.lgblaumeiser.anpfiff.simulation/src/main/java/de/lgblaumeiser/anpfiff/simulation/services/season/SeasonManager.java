@@ -6,7 +6,10 @@
 
 package de.lgblaumeiser.anpfiff.simulation.services.season;
 
-import de.lgblaumeiser.anpfiff.simulation.model.Season;
+import java.util.List;
+
+import de.lgblaumeiser.anpfiff.simulation.model.Game;
+import de.lgblaumeiser.anpfiff.simulation.model.GameResult;
 
 /**
  * Service provides methods for game control like starting a game, persistency,
@@ -19,12 +22,31 @@ public interface SeasonManager {
 	 * Creates a new season, i.e., reads in the team data and initializes all
 	 * season data
 	 *
-	 * @return The general management object for a season which is the starting
-	 *         point for the model
+	 * @return The season manager to allow a fluent interface
 	 */
-	Season newSeason();
+	SeasonManager newSeason();
 
+	/**
+	 * Play the next game day
+	 *
+	 * @return The season manager itself to allow a fluent interface
+	 */
+	SeasonManager playNextGameDay();
+
+	/**
+	 * @return Returns the results of the last game day
+	 */
+	List<GameResult> getResultsForLastGameDay();
+
+	/**
+	 * @return Returns the games of the last game day
+	 */
+	List<Game> getLastGameDay();
+
+	/**
+	 * @return Access to a new season manager
+	 */
 	static SeasonManager getSeasonManager() {
-		return SeasonManagerImpl.getInstance();
+		return new SeasonManagerImpl();
 	}
 }

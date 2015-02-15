@@ -6,9 +6,13 @@
 
 package de.lgblaumeiser.anpfiff.simulation.services.season;
 
+import static com.google.common.base.Preconditions.checkState;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.collections.MapUtils;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -16,8 +20,10 @@ import com.google.common.collect.Maps;
 import de.lgblaumeiser.anpfiff.simulation.model.FootballTeam;
 import de.lgblaumeiser.anpfiff.simulation.model.Game;
 import de.lgblaumeiser.anpfiff.simulation.model.GamePlan;
+import de.lgblaumeiser.anpfiff.simulation.model.GameResult;
 import de.lgblaumeiser.anpfiff.simulation.model.Season;
 import de.lgblaumeiser.anpfiff.simulation.persistency.PersistencyService;
+import de.lgblaumeiser.anpfiff.simulation.services.game.GameSimulation;
 
 /**
  * Implementation of the SeasonManager service interface
@@ -49,16 +55,24 @@ class SeasonManagerImpl implements SeasonManager {
 		gameIndexMap.put(16, new Integer[] { 16, 1, 6, 12, 14, 9, 4, 17, 8, 13, 0, 15, 2, 11, 7, 3, 10, 5 });
 	}
 
+	private final GameSimulation gameSimulation = GameSimulation.getGameSimulation();
+
+	private Season season;
+
+	private final Map<Integer, List<GameResult>> gameDayStatistics = Maps.newHashMapWithExpectedSize(2 * gameIndexMap
+			.size());
+
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see de.lgblaumeiser.anpfiff.services.season.SeasonManager#newSeason()
 	 */
 	@Override
-	public Season newSeason() {
+	public SeasonManager newSeason() {
 		final List<FootballTeam> teams = persistency.loadInitialTeamData();
 		final GamePlan gamePlan = createGamePlan(teams);
-		return new Season(teams, gamePlan);
+		season = new Season(teams, gamePlan);
+		return this;
 	}
 
 	private GamePlan createGamePlan(final List<FootballTeam> teams) {
@@ -84,13 +98,31 @@ class SeasonManagerImpl implements SeasonManager {
 		return new GamePlan(gameDays);
 	}
 
-	private static final SeasonManager seasonManager = new SeasonManagerImpl();
-
-	public static SeasonManager getInstance() {
-		return seasonManager;
+	@Override
+	public SeasonManager playNextGameDay() {
+		final int gameDay = gameDayStatistics.size();
+		final List<Game> games = season.getGameDay(gameDay);
+		final List<GameResult> results = Lists.newArrayListWithCapacity(games.size());
+		for (final Game game : games) {
+			results.add(gameSimulation.simulateGame(game));
+		}
+		gameDayStatistics.put(gameDay, results);
+		return this;
 	}
 
-	private SeasonManagerImpl() {
-		// Ensure Singleton behavior
+	@Override
+	public List<GameResult> getResultsForLastGameDay() {
+		return gameDayStatistics.get(lastGameDay());
+	}
+
+	@Override
+	public List<Game> getLastGameDay() {
+		return season.getGameDay(lastGameDay());
+	}
+
+	private int lastGameDay() {
+		checkState(MapUtils.isNotEmpty(gameDayStatistics));
+		return gameDayStatistics.size() - 1;
+
 	}
 }
