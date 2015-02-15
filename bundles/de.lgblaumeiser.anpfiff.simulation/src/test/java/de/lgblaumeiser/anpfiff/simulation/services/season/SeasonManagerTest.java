@@ -12,6 +12,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.junit.Test;
 
@@ -88,5 +89,29 @@ public class SeasonManagerTest {
 		for (int index = 0; index < SeasonConstants.NUMBER_OF_GAME_DAYS + 1; index++) {
 			season.playNextGameDay();
 		}
+	}
+
+	private static final int TEST_ITERATIONS = 1000;
+
+	@Test
+	public final void testPlaySeasonDiversion() {
+		final Set<String> seasonStrings = Sets.newHashSetWithExpectedSize(TEST_ITERATIONS);
+		int duplicatedSeasons = 0;
+		for (int index = 0; index < 1000; index++) {
+			final SeasonManager season = SeasonManager.getSeasonManager().newSeason();
+			String seasonString = "";
+			for (int gameday = 0; gameday < SeasonConstants.NUMBER_OF_GAME_DAYS; gameday++) {
+				season.playNextGameDay();
+				final List<Game> gameDay = season.getLastGameDay();
+				seasonString = seasonString
+						+ gameDay.stream().map(game -> game.getHometeam().getName() + game.getGuestteam().getName())
+								.collect(Collectors.joining());
+			}
+			if (seasonStrings.contains(seasonString)) {
+				duplicatedSeasons++;
+			}
+			seasonStrings.add(seasonString);
+		}
+		assertEquals(0, duplicatedSeasons);
 	}
 }

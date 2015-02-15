@@ -6,6 +6,7 @@
 
 package de.lgblaumeiser.anpfiff.simulation;
 
+import de.lgblaumeiser.anpfiff.simulation.model.GameResult;
 import de.lgblaumeiser.anpfiff.simulation.model.SeasonConstants;
 import de.lgblaumeiser.anpfiff.simulation.services.season.SeasonManager;
 
@@ -21,10 +22,14 @@ public class SimulateSeason {
 	 *            Command line parameters (not used)
 	 */
 	public static void main(String[] args) {
-		final SeasonManager season = SeasonManager.getSeasonManager();
+		final SeasonManager season = SeasonManager.getSeasonManager().newSeason();
 		for (int gameday = 0; gameday < SeasonConstants.NUMBER_OF_GAME_DAYS; gameday++) {
-			// TODO Auto-generated method stub
+			season.playNextGameDay();
+			System.out.println("Gameday " + (gameday + 1) + ":");
+			for (final GameResult game : season.getResultsForLastGameDay()) {
+				System.out.println(game);
+			}
+			System.out.println(" ");
 		}
-
 	}
 }
