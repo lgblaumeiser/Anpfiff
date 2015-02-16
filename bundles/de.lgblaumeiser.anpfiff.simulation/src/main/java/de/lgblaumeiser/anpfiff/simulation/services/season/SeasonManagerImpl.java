@@ -11,8 +11,7 @@ import static com.google.common.base.Preconditions.checkState;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.commons.collections.MapUtils;
+import java.util.stream.Collectors;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -23,7 +22,7 @@ import de.lgblaumeiser.anpfiff.simulation.model.GamePlan;
 import de.lgblaumeiser.anpfiff.simulation.model.GameResult;
 import de.lgblaumeiser.anpfiff.simulation.model.Season;
 import de.lgblaumeiser.anpfiff.simulation.model.SeasonConstants;
-import de.lgblaumeiser.anpfiff.simulation.model.Table;
+import de.lgblaumeiser.anpfiff.simulation.model.TableEntry;
 import de.lgblaumeiser.anpfiff.simulation.persistency.PersistencyService;
 import de.lgblaumeiser.anpfiff.simulation.services.game.GameSimulation;
 
@@ -62,10 +61,11 @@ class SeasonManagerImpl implements SeasonManager {
 
 	private Season season;
 
-	private Table table;
+	private List<TableEntry> table;
 
-	private final Map<Integer, List<GameResult>> gameDayStatistics = Maps
-			.newHashMapWithExpectedSize(SeasonConstants.NUMBER_OF_GAME_DAYS);
+	private int lastGameDay = 0;
+
+	private List<GameResult> lastGameResults;
 
 	/*
 	 * (non-Javadoc)
@@ -77,7 +77,10 @@ class SeasonManagerImpl implements SeasonManager {
 		final List<FootballTeam> teams = persistency.loadInitialTeamData();
 		final GamePlan gamePlan = createGamePlan(teams);
 		season = new Season(teams, gamePlan);
-		table = new Table(teams);
+		table = Lists.newArrayListWithCapacity(SeasonConstants.NUMBER_OF_TEAMS);
+		for (final FootballTeam team : teams) {
+			table.add(new TableEntry(team, 0, 0, 0, 0, 0));
+		}
 		return this;
 	}
 
@@ -106,36 +109,97 @@ class SeasonManagerImpl implements SeasonManager {
 
 	@Override
 	public SeasonManager playNextGameDay() {
-		final int gameDay = gameDayStatistics.size();
-		checkState(gameDay >= 0 && gameDay < SeasonConstants.NUMBER_OF_GAME_DAYS);
-		final List<Game> games = season.getGameDay(gameDay);
+		lastGameDay++;
+		checkState(lastGameDay <= SeasonConstants.NUMBER_OF_GAME_DAYS);
+		final List<Game> games = season.getGameDay(lastGameDay);
 		final List<GameResult> results = Lists.newArrayListWithCapacity(games.size());
 		for (final Game game : games) {
 			results.add(gameSimulation.simulateGame(game));
 		}
-		gameDayStatistics.put(gameDay, results);
-		table.setResults(results);
+		lastGameResults = results;
+		computeNewTable();
 		return this;
+	}
+
+	private static final class ResultCalculator {
+		private final int goalsShot;
+		private final int goalsReceived;
+
+		private ResultCalculator(int goalsShot, int goalsReceived) {
+			this.goalsShot = goalsShot;
+			this.goalsReceived = goalsReceived;
+		}
+
+		private final int getGoalsShot() {
+			return goalsShot;
+		}
+
+		private final int getGoalsReceived() {
+			return goalsReceived;
+		}
+
+		private final int getWonAdder() {
+			return goalsShot > goalsReceived ? 1 : 0;
+		}
+
+		private final int getDrawAdder() {
+			return goalsShot == goalsReceived ? 1 : 0;
+		}
+
+		private final int getLostAdder() {
+			return goalsShot < goalsReceived ? 1 : 0;
+		}
+	}
+
+	private void computeNewTable() {
+		final Map<FootballTeam, ResultCalculator> nameToResultMapping = Maps
+				.newHashMapWithExpectedSize(SeasonConstants.NUMBER_OF_TEAMS);
+		for (final GameResult result : lastGameResults) {
+			nameToResultMapping.put(result.getHometeam(),
+					new ResultCalculator(result.getHometeamgoals(), result.getGuestteamgoals()));
+			nameToResultMapping.put(result.getGuestteam(),
+					new ResultCalculator(result.getGuestteamgoals(), result.getHometeamgoals()));
+		}
+		final List<TableEntry> newTable = Lists.newArrayListWithCapacity(SeasonConstants.NUMBER_OF_TEAMS);
+		for (final TableEntry currentEntry : table) {
+			final ResultCalculator result = nameToResultMapping.get(currentEntry.getTeam());
+			newTable.add(createNewEntry(currentEntry, result));
+		}
+		table = newTable.stream().sorted((e1, e2) -> {
+			final int comparison = Integer.compare(e1.getPoints(), e2.getPoints());
+			if (comparison != 0) {
+				return -1 * comparison; // -1 multiplier to change direction of
+				// sorting
+			}
+			return -1 * Integer.compare(e1.getGoalDifference(), e2.getGoalDifference());
+		}).collect(Collectors.toList());
+	}
+
+	private TableEntry createNewEntry(TableEntry entry, ResultCalculator result) {
+		final FootballTeam team = entry.getTeam();
+		final int goalsShot = entry.getGoalsShot() + result.getGoalsShot();
+		final int goalsReceived = entry.getGoalsReceived() + result.getGoalsReceived();
+		final int won = entry.getWon() + result.getWonAdder();
+		final int draw = entry.getDraw() + result.getDrawAdder();
+		final int lost = entry.getLost() + result.getLostAdder();
+		return new TableEntry(team, goalsShot, goalsReceived, won, draw, lost);
 	}
 
 	@Override
 	public List<GameResult> getResultsForLastGameDay() {
-		return gameDayStatistics.get(lastGameDay());
+		checkState(lastGameDay > 0);
+		return lastGameResults;
 	}
 
 	@Override
 	public List<Game> getLastGameDay() {
-		return season.getGameDay(lastGameDay());
-	}
-
-	private int lastGameDay() {
-		checkState(MapUtils.isNotEmpty(gameDayStatistics));
-		return gameDayStatistics.size() - 1;
-
+		checkState(lastGameDay > 0);
+		return season.getGameDay(lastGameDay);
 	}
 
 	@Override
-	public Table getTableForLastGameDay() {
+	public List<TableEntry> getTableForLastGameDay() {
+		checkState(lastGameDay > 0);
 		return table;
 	}
 }

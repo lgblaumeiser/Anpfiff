@@ -23,7 +23,6 @@ import com.google.common.collect.Sets;
 import de.lgblaumeiser.anpfiff.simulation.model.Game;
 import de.lgblaumeiser.anpfiff.simulation.model.GameResult;
 import de.lgblaumeiser.anpfiff.simulation.model.SeasonConstants;
-import de.lgblaumeiser.anpfiff.simulation.model.Table;
 import de.lgblaumeiser.anpfiff.simulation.model.TableEntry;
 
 /**
@@ -109,7 +108,7 @@ public class SeasonManagerTest {
 				final List<Game> gameDay = season.getLastGameDay();
 				seasonString = seasonString
 						+ gameDay.stream().map(game -> game.getHometeam().getName() + game.getGuestteam().getName())
-						.collect(Collectors.joining());
+								.collect(Collectors.joining());
 			}
 			if (seasonStrings.contains(seasonString)) {
 				duplicatedSeasons++;
@@ -137,8 +136,8 @@ public class SeasonManagerTest {
 			goalsGatheredFromResults += gameDayResult.stream()
 					.map(gameResult -> gameResult.getHometeamgoals() + gameResult.getGuestteamgoals())
 					.mapToInt(Integer::intValue).sum();
-			final Table table = season.getTableForLastGameDay();
-			for (final TableEntry tableEntry : table.getTeamIterator()) {
+			final List<TableEntry> table = season.getTableForLastGameDay();
+			for (final TableEntry tableEntry : table) {
 				teamNames.add(tableEntry.getTeam().getName());
 				pointsGatheredFromTable += tableEntry.getPoints();
 				goalsShotGatheredFromTable += tableEntry.getGoalsShot();
@@ -156,13 +155,13 @@ public class SeasonManagerTest {
 		final SeasonManager season = SeasonManager.getSeasonManager().newSeason();
 		for (int gameday = 0; gameday < SeasonConstants.NUMBER_OF_GAME_DAYS; gameday++) {
 			season.playNextGameDay();
-			final Table table = season.getTableForLastGameDay();
-			final Iterable<TableEntry> entries = table.getTeamIterator();
-			final Iterator<TableEntry> iterator = entries.iterator();
+			final Iterator<TableEntry> iterator = season.getTableForLastGameDay().iterator();
 			TableEntry last = iterator.next();
 			while (iterator.hasNext()) {
 				final TableEntry current = iterator.next();
 				assertFalse(last.getPoints() < current.getPoints());
+				assertFalse(last.getPoints() == current.getPoints()
+						&& last.getGoalDifference() < current.getGoalDifference());
 				last = current;
 			}
 		}

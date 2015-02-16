@@ -33,13 +33,13 @@ public class GamePlan {
 	}
 
 	public List<Game> getGameDay(final int index) {
-		checkArgument(index >= 0 && index < SeasonConstants.NUMBER_OF_GAME_DAYS);
-		return gameTable.get(index);
+		checkArgument(index > 0 && index <= SeasonConstants.NUMBER_OF_GAME_DAYS);
+		return gameTable.get(index - 1);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -49,7 +49,7 @@ public class GamePlan {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -62,7 +62,7 @@ public class GamePlan {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#toString()
 	 */
 	@Override

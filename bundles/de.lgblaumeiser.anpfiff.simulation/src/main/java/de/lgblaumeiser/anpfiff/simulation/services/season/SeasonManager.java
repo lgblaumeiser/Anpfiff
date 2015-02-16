@@ -10,7 +10,7 @@ import java.util.List;
 
 import de.lgblaumeiser.anpfiff.simulation.model.Game;
 import de.lgblaumeiser.anpfiff.simulation.model.GameResult;
-import de.lgblaumeiser.anpfiff.simulation.model.Table;
+import de.lgblaumeiser.anpfiff.simulation.model.TableEntry;
 
 /**
  * Service provides methods for game control like starting a game, persistency,
@@ -47,7 +47,7 @@ public interface SeasonManager {
 	/**
 	 * @return Returns the table after the last game day
 	 */
-	Table getTableForLastGameDay();
+	List<TableEntry> getTableForLastGameDay();
 
 	/**
 	 * @return Access to a new season manager
