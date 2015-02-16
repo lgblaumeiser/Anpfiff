@@ -8,6 +8,7 @@ package de.lgblaumeiser.anpfiff.simulation;
 
 import de.lgblaumeiser.anpfiff.simulation.model.GameResult;
 import de.lgblaumeiser.anpfiff.simulation.model.SeasonConstants;
+import de.lgblaumeiser.anpfiff.simulation.model.TableEntry;
 import de.lgblaumeiser.anpfiff.simulation.services.season.SeasonManager;
 
 /**
@@ -30,8 +31,11 @@ public class SimulateSeason {
 				System.out.println(game);
 			}
 			System.out.println("\n");
-			System.out.println(season.getTableForLastGameDay());
-			System.out.println("\n");
+			System.out.println("Table for game day " + (gameday + 1) + ":");
+			for (final TableEntry entry : season.getTableForLastGameDay()) {
+				System.out.println(entry);
+			}
+			java.lang.System.out.println("\n");
 		}
 	}
 }

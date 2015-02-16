@@ -107,7 +107,7 @@ public class TableEntry {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -117,7 +117,7 @@ public class TableEntry {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -133,7 +133,7 @@ public class TableEntry {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -154,7 +154,6 @@ public class TableEntry {
 		entryString.append(draw);
 		entryString.append(" ");
 		entryString.append(lost);
-		entryString.append("\n");
 		return entryString.toString();
 	}
 }
