@@ -22,7 +22,7 @@ class SimplePersistencyService implements PersistencyService {
 	@Override
 	public List<FootballTeam> loadInitialTeamData() {
 		final List<FootballTeam> teams = Lists.newArrayListWithCapacity(SeasonConstants.NUMBER_OF_TEAMS);
-		teams.add(new FootballTeam("Bayern München", 20, 20, 1100));
+		teams.add(new FootballTeam("Bayern München", 19, 19, 1100));
 		teams.add(new FootballTeam("VfL Wolfsburg", 19, 19, 1095));
 		teams.add(new FootballTeam("Bayer Leverkusen", 18, 18, 1085));
 		teams.add(new FootballTeam("Borussia Mönchengladbach", 17, 19, 1085));

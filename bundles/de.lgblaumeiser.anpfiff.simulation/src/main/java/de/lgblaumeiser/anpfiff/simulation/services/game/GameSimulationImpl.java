@@ -162,7 +162,7 @@ class GameSimulationImpl implements GameSimulation {
 	// scored a goal due to the team shape difference, if the second is true the
 	// guest team scored a goal due to the team shape difference
 	private boolean[] randomTeamShapeGoals(final FootballTeam hometeam, final FootballTeam guestteam) {
-		final int teamshapegoalindex = hometeam.getTeamshape() >= guestteam.getTeamshape() ? 0 : 1;
+		final int teamshapegoalindex = hometeam.getCurrentTeamshape() >= guestteam.getCurrentTeamshape() ? 0 : 1;
 		final boolean teamshapegoal = randomGenerator.nextBoolean();
 		final boolean[] teamshapegoalfield = new boolean[2];
 		teamshapegoalfield[0] = false;

@@ -63,7 +63,7 @@ class SeasonManagerImpl implements SeasonManager {
 
 	private List<TableEntry> table;
 
-	private int lastGameDay = 0;
+	private int lastGameDay;
 
 	private List<GameResult> lastGameResults;
 
@@ -81,6 +81,7 @@ class SeasonManagerImpl implements SeasonManager {
 		for (final FootballTeam team : teams) {
 			table.add(new TableEntry(team, 0, 0, 0, 0, 0));
 		}
+		lastGameDay = 0;
 		return this;
 	}
 
@@ -111,6 +112,7 @@ class SeasonManagerImpl implements SeasonManager {
 	public SeasonManager playNextGameDay() {
 		lastGameDay++;
 		checkState(lastGameDay <= SeasonConstants.NUMBER_OF_GAME_DAYS);
+		checkShapeReductionInitialization();
 		final List<Game> games = season.getGameDay(lastGameDay);
 		final List<GameResult> results = Lists.newArrayListWithCapacity(games.size());
 		for (final Game game : games) {
@@ -118,7 +120,28 @@ class SeasonManagerImpl implements SeasonManager {
 		}
 		lastGameResults = results;
 		computeNewTable();
+		handleTeamShape();
 		return this;
+	}
+
+	private void checkShapeReductionInitialization() {
+		if (firstGameDayAfterPreparation()) {
+			for (final TableEntry team : table) {
+				team.getTeam().initializeTeamshape();
+			}
+		}
+	}
+
+	private boolean firstGameDayAfterPreparation() {
+		return lastGameDay == 1 || lastGameDay == SeasonConstants.NUMBER_OF_GAME_DAYS_PER_HALF_SEASON + 1
+				&& SeasonConstants.WINTER_BREAK_AFTER_HALF_SEASON;
+	}
+
+	private void handleTeamShape() {
+		for (final GameResult result : lastGameResults) {
+			result.getHometeam().reduceCurrentTeamshape(result.getHomeshapereduction());
+			result.getGuestteam().reduceCurrentTeamshape(result.getGuestshapereduction());
+		}
 	}
 
 	private static final class ResultCalculator {

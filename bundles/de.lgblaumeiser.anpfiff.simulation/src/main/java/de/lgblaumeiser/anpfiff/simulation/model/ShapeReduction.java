@@ -12,5 +12,19 @@ package de.lgblaumeiser.anpfiff.simulation.model;
  * @author Lars Geyer-Blaumeiser
  */
 public enum ShapeReduction {
-	LOW, MEDIUM, HIGH;
+	LOW(1), MEDIUM(2), HIGH(3);
+
+	private final int reductionValue;
+
+	ShapeReduction(int reductionValue) {
+		this.reductionValue = reductionValue;
+	}
+
+	int getShapeReductionValuePerPlayer() {
+		return reductionValue;
+	}
+
+	int getShapeReductionValuePerTeam() {
+		return 11 * reductionValue;
+	}
 }

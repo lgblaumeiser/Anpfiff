@@ -23,6 +23,8 @@ public class FootballTeam {
 	private final int defensiveStrength;
 	private final String name;
 
+	private transient int currentTeamShape;
+
 	/**
 	 * @param name
 	 *            Name of the team
@@ -45,11 +47,34 @@ public class FootballTeam {
 	}
 
 	/**
-	 * @return The conditional shape of the team, that is the sum of the shape
-	 *         of the single players currently in the first 11
+	 * @return The initial conditional shape of the team, that is the sum of the
+	 *         shape of the single players currently in the first 11
 	 */
 	public int getTeamshape() {
 		return teamShape;
+	}
+
+	/**
+	 * @return The current team shape after the last game day
+	 */
+	public int getCurrentTeamshape() {
+		return currentTeamShape;
+	}
+
+	/**
+	 * @param reduction
+	 *            Reduce the team shape by the shape reduction given.
+	 */
+	public void reduceCurrentTeamshape(ShapeReduction reduction) {
+		currentTeamShape -= reduction.getShapeReductionValuePerTeam();
+	}
+
+	/**
+	 * Initialization of the teamShape at the beginning of a season or after
+	 * winter break
+	 */
+	public void initializeTeamshape() {
+		currentTeamShape = teamShape;
 	}
 
 	/**
