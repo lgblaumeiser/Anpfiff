@@ -6,9 +6,9 @@
 
 package de.lgblaumeiser.anpfiff.simulation.persistency;
 
-import java.util.List;
-
 import com.google.common.collect.Lists;
+
+import java.util.List;
 
 import de.lgblaumeiser.anpfiff.simulation.model.FootballTeam;
 import de.lgblaumeiser.anpfiff.simulation.model.SeasonConstants;

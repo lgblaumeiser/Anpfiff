@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/home/lars/AndroidStudioProjects/Anpfiff/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.0.0/libs/internal_impl-22.0.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="b5b92f469d515a13d778900f6d50c03d12f35504">
+        <dex dex="/home/lars/AndroidStudioProjects/Anpfiff/app/build/intermediates/pre-dexed/debug/internal_impl-22.0.0-042ab2995d91d3eee514c1690d6801f590976388.jar" />
+    </item>
+    <item
+        jar="/home/lars/.gradle/caches/modules-2/files-2.1/com.google.guava/guava/16.0.1/5fa98cd1a63c99a44dd8d3b77e4762b066a5d0c5/guava-16.0.1.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="5fa98cd1a63c99a44dd8d3b77e4762b066a5d0c5">
+        <dex dex="/home/lars/AndroidStudioProjects/Anpfiff/app/build/intermediates/pre-dexed/debug/guava-16.0.1-e584fb315ca2e68e2dc21e4f7f7ddc9e407a1b97.jar" />
+    </item>
+    <item
+        jar="/home/lars/AndroidStudioProjects/Anpfiff/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.0.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="4e86306289ace4aa0cfec44a05ed2b410d36989d">
+        <dex dex="/home/lars/AndroidStudioProjects/Anpfiff/app/build/intermediates/pre-dexed/debug/classes-c161c582f2543c711a08abfff1e2bc79e3504229.jar" />
+    </item>
+    <item
+        jar="/home/lars/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/22.0.0/support-annotations-22.0.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="685d0b2c590447e85284ed84712cb363ba04eff8">
+        <dex dex="/home/lars/AndroidStudioProjects/Anpfiff/app/build/intermediates/pre-dexed/debug/support-annotations-22.0.0-7d1713692d9b9d376cf1b4d0863d5b66466f34fb.jar" />
+    </item>
+    <item
+        jar="/home/lars/AndroidStudioProjects/Anpfiff/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="d84409890828e07d344a3b9b1da545dba9897b51">
+        <dex dex="/home/lars/AndroidStudioProjects/Anpfiff/app/build/intermediates/pre-dexed/debug/classes-d9e94450259961bb59ac18bb8b4138f81790feb2.jar" />
+    </item>
+
+</items>

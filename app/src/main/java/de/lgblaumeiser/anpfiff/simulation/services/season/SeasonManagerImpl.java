@@ -21,10 +21,9 @@ import de.lgblaumeiser.anpfiff.simulation.model.Season;
 import de.lgblaumeiser.anpfiff.simulation.model.SeasonConstants;
 import de.lgblaumeiser.anpfiff.simulation.model.TableEntry;
 import de.lgblaumeiser.anpfiff.simulation.persistency.PersistencyService;
-import de.lgblaumeiser.anpfiff.simulation.persistency.PersistencyServiceFactory;
 import de.lgblaumeiser.anpfiff.simulation.services.game.GameSimulation;
-import de.lgblaumeiser.anpfiff.simulation.services.game.GameSimulationFactory;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 import static java.util.Collections.shuffle;
 import static java.util.Collections.sort;
@@ -35,7 +34,7 @@ import static java.util.Collections.sort;
  * @author Lars Geyer-Blaumeiser
  */
 class SeasonManagerImpl implements SeasonManager {
-	private final PersistencyService persistency = PersistencyServiceFactory.getPersistencyService();
+	private PersistencyService persistency;
 
 	private static final Map<Integer, Integer[]> gameIndexMap = Maps
 			.newHashMapWithExpectedSize(SeasonConstants.NUMBER_OF_GAME_DAYS_PER_HALF_SEASON);
@@ -60,7 +59,7 @@ class SeasonManagerImpl implements SeasonManager {
 		gameIndexMap.put(16, new Integer[] { 16, 1, 6, 12, 14, 9, 4, 17, 8, 13, 0, 15, 2, 11, 7, 3, 10, 5 });
 	}
 
-	private final GameSimulation gameSimulation = GameSimulationFactory.getGameSimulation();
+    private GameSimulation gameSimulation;
 
 	private Season season;
 
@@ -77,6 +76,8 @@ class SeasonManagerImpl implements SeasonManager {
 	 */
 	@Override
 	public SeasonManager newSeason() {
+        checkNotNull(gameSimulation);
+        checkNotNull(persistency);
 		final List<FootballTeam> teams = persistency.loadInitialTeamData();
 		final GamePlan gamePlan = createGamePlan(teams);
 		season = new Season(teams, gamePlan);
@@ -113,7 +114,9 @@ class SeasonManagerImpl implements SeasonManager {
 
 	@Override
 	public SeasonManager playNextGameDay() {
-		lastGameDay++;
+        checkNotNull(gameSimulation);
+        checkNotNull(persistency);
+        lastGameDay++;
 		checkState(lastGameDay <= SeasonConstants.NUMBER_OF_GAME_DAYS);
 		checkShapeReductionInitialization();
 		final List<Game> games = season.getGameDay(lastGameDay);
@@ -225,19 +228,35 @@ class SeasonManagerImpl implements SeasonManager {
 
 	@Override
 	public List<GameResult> getResultsForLastGameDay() {
-		checkState(lastGameDay > 0);
+        checkNotNull(gameSimulation);
+        checkNotNull(persistency);
+        checkState(lastGameDay > 0);
 		return lastGameResults;
 	}
 
 	@Override
 	public List<Game> getLastGameDay() {
+        checkNotNull(gameSimulation);
+        checkNotNull(persistency);
 		checkState(lastGameDay > 0);
 		return season.getGameDay(lastGameDay);
 	}
 
 	@Override
 	public List<TableEntry> getTableForLastGameDay() {
+        checkNotNull(gameSimulation);
+        checkNotNull(persistency);
 		checkState(lastGameDay > 0);
 		return table;
 	}
+
+    public void setGameSimulation(GameSimulation gameSimulation) {
+        checkNotNull(gameSimulation);
+        this.gameSimulation = gameSimulation;
+    }
+
+    public void setPersistency(PersistencyService persistency) {
+        checkNotNull(persistency);
+        this.persistency = persistency;
+    }
 }

@@ -6,9 +6,6 @@
 
 package de.lgblaumeiser.anpfiff.simulation.services.game;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.collect.Maps.newHashMap;
-
 import java.util.Map;
 import java.util.Random;
 
@@ -16,6 +13,9 @@ import de.lgblaumeiser.anpfiff.simulation.model.FootballTeam;
 import de.lgblaumeiser.anpfiff.simulation.model.Game;
 import de.lgblaumeiser.anpfiff.simulation.model.GameResult;
 import de.lgblaumeiser.anpfiff.simulation.model.ShapeReduction;
+
+import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.Maps.newHashMap;
 
 /**
  * Service implementation of the game simulation
