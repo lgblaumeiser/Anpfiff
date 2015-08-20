@@ -112,6 +112,22 @@ class SeasonManagerImpl implements SeasonManager {
 		return new GamePlan(gameDays);
 	}
 
+
+	@Override
+	public int getCurrentGameDay() {
+		checkNotNull(gameSimulation);
+		checkNotNull(persistency);
+		return lastGameDay;
+	}
+
+	@Override
+	public List<Game> getNextGameDay() {
+		checkNotNull(gameSimulation);
+		checkNotNull(persistency);
+		checkState(lastGameDay < SeasonConstants.NUMBER_OF_GAME_DAYS);
+		return season.getGameDay(lastGameDay+1);
+	}
+
 	@Override
 	public SeasonManager playNextGameDay() {
         checkNotNull(gameSimulation);
@@ -246,7 +262,6 @@ class SeasonManagerImpl implements SeasonManager {
 	public List<TableEntry> getTableForLastGameDay() {
         checkNotNull(gameSimulation);
         checkNotNull(persistency);
-		checkState(lastGameDay > 0);
 		return table;
 	}
 
